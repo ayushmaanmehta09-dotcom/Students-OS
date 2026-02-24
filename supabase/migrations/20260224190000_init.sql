@@ -134,33 +134,42 @@ alter table public.subscriptions enable row level security;
 alter table public.telemetry_feedback enable row level security;
 
 -- deadlines
-create policy if not exists deadlines_select_own on public.deadlines
+drop policy if exists deadlines_select_own on public.deadlines;
+create policy deadlines_select_own on public.deadlines
 for select using (auth.uid() = user_id);
 
-create policy if not exists deadlines_insert_own on public.deadlines
+drop policy if exists deadlines_insert_own on public.deadlines;
+create policy deadlines_insert_own on public.deadlines
 for insert with check (auth.uid() = user_id);
 
-create policy if not exists deadlines_update_own on public.deadlines
+drop policy if exists deadlines_update_own on public.deadlines;
+create policy deadlines_update_own on public.deadlines
 for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
-create policy if not exists deadlines_delete_own on public.deadlines
+drop policy if exists deadlines_delete_own on public.deadlines;
+create policy deadlines_delete_own on public.deadlines
 for delete using (auth.uid() = user_id);
 
 -- checklists
-create policy if not exists checklists_select_own on public.checklists
+drop policy if exists checklists_select_own on public.checklists;
+create policy checklists_select_own on public.checklists
 for select using (auth.uid() = user_id);
 
-create policy if not exists checklists_insert_own on public.checklists
+drop policy if exists checklists_insert_own on public.checklists;
+create policy checklists_insert_own on public.checklists
 for insert with check (auth.uid() = user_id);
 
-create policy if not exists checklists_update_own on public.checklists
+drop policy if exists checklists_update_own on public.checklists;
+create policy checklists_update_own on public.checklists
 for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
-create policy if not exists checklists_delete_own on public.checklists
+drop policy if exists checklists_delete_own on public.checklists;
+create policy checklists_delete_own on public.checklists
 for delete using (auth.uid() = user_id);
 
 -- checklist items resolve ownership through parent checklist
-create policy if not exists checklist_items_select_own on public.checklist_items
+drop policy if exists checklist_items_select_own on public.checklist_items;
+create policy checklist_items_select_own on public.checklist_items
 for select using (
   exists (
     select 1
@@ -170,7 +179,8 @@ for select using (
   )
 );
 
-create policy if not exists checklist_items_insert_own on public.checklist_items
+drop policy if exists checklist_items_insert_own on public.checklist_items;
+create policy checklist_items_insert_own on public.checklist_items
 for insert with check (
   exists (
     select 1
@@ -180,7 +190,8 @@ for insert with check (
   )
 );
 
-create policy if not exists checklist_items_update_own on public.checklist_items
+drop policy if exists checklist_items_update_own on public.checklist_items;
+create policy checklist_items_update_own on public.checklist_items
 for update using (
   exists (
     select 1
@@ -198,7 +209,8 @@ with check (
   )
 );
 
-create policy if not exists checklist_items_delete_own on public.checklist_items
+drop policy if exists checklist_items_delete_own on public.checklist_items;
+create policy checklist_items_delete_own on public.checklist_items
 for delete using (
   exists (
     select 1
@@ -209,40 +221,51 @@ for delete using (
 );
 
 -- email drafts
-create policy if not exists email_drafts_select_own on public.email_drafts
+drop policy if exists email_drafts_select_own on public.email_drafts;
+create policy email_drafts_select_own on public.email_drafts
 for select using (auth.uid() = user_id);
 
-create policy if not exists email_drafts_insert_own on public.email_drafts
+drop policy if exists email_drafts_insert_own on public.email_drafts;
+create policy email_drafts_insert_own on public.email_drafts
 for insert with check (auth.uid() = user_id);
 
-create policy if not exists email_drafts_update_own on public.email_drafts
+drop policy if exists email_drafts_update_own on public.email_drafts;
+create policy email_drafts_update_own on public.email_drafts
 for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
-create policy if not exists email_drafts_delete_own on public.email_drafts
+drop policy if exists email_drafts_delete_own on public.email_drafts;
+create policy email_drafts_delete_own on public.email_drafts
 for delete using (auth.uid() = user_id);
 
 -- payment logs
-create policy if not exists payment_logs_select_own on public.payment_logs
+drop policy if exists payment_logs_select_own on public.payment_logs;
+create policy payment_logs_select_own on public.payment_logs
 for select using (auth.uid() = user_id);
 
-create policy if not exists payment_logs_insert_own on public.payment_logs
+drop policy if exists payment_logs_insert_own on public.payment_logs;
+create policy payment_logs_insert_own on public.payment_logs
 for insert with check (auth.uid() = user_id);
 
-create policy if not exists payment_logs_update_own on public.payment_logs
+drop policy if exists payment_logs_update_own on public.payment_logs;
+create policy payment_logs_update_own on public.payment_logs
 for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
-create policy if not exists payment_logs_delete_own on public.payment_logs
+drop policy if exists payment_logs_delete_own on public.payment_logs;
+create policy payment_logs_delete_own on public.payment_logs
 for delete using (auth.uid() = user_id);
 
 -- subscriptions
-create policy if not exists subscriptions_select_own on public.subscriptions
+drop policy if exists subscriptions_select_own on public.subscriptions;
+create policy subscriptions_select_own on public.subscriptions
 for select using (auth.uid() = user_id);
 
 -- telemetry feedback
-create policy if not exists telemetry_feedback_select_own on public.telemetry_feedback
+drop policy if exists telemetry_feedback_select_own on public.telemetry_feedback;
+create policy telemetry_feedback_select_own on public.telemetry_feedback
 for select using (auth.uid() = user_id);
 
-create policy if not exists telemetry_feedback_insert_own on public.telemetry_feedback
+drop policy if exists telemetry_feedback_insert_own on public.telemetry_feedback;
+create policy telemetry_feedback_insert_own on public.telemetry_feedback
 for insert with check (auth.uid() = user_id);
 
 create index if not exists idx_deadlines_user_due_date on public.deadlines (user_id, due_date);

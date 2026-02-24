@@ -35,6 +35,7 @@ export default function ChecklistsPage() {
     void loadChecklists().catch((loadError) => {
       setError(loadError instanceof Error ? loadError.message : "Failed to load checklists");
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
