@@ -29,8 +29,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               const active = pathname === item.href;
               return (
                 <li key={item.href}>
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  <Link className={active ? "nav-link active" : "nav-link"} href={item.href as any}>
+                  <Link className={active ? "nav-link active" : "nav-link"} href={item.href}>
                     {item.label}
                   </Link>
                 </li>
