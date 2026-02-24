@@ -56,7 +56,7 @@ export default function DeadlinesPage() {
   return (
     <section className="page-grid">
       <article className="panel">
-        <h2>Add deadline</h2>
+        <h2 style={{ color: "var(--accent)", marginBottom: "20px" }}>Add new deadline</h2>
         <form onSubmit={onSubmit}>
           <label className="label" htmlFor="deadline-title">
             Title
@@ -95,8 +95,21 @@ export default function DeadlinesPage() {
               <tr key={item.id}>
                 <td>{item.title}</td>
                 <td>{new Date(item.due_date).toLocaleString()}</td>
-                <td>{item.status}</td>
-                <td>{item.amount_cents ? `${item.currency} ${(item.amount_cents / 100).toFixed(2)}` : "-"}</td>
+                <td>
+                  <span
+                    style={{
+                      padding: "4px 8px",
+                      borderRadius: "12px",
+                      fontSize: "12px",
+                      fontWeight: 500,
+                      background: item.status === "completed" ? "rgba(16, 185, 129, 0.15)" : "rgba(236, 72, 153, 0.15)",
+                      color: item.status === "completed" ? "#10b981" : "var(--accent)"
+                    }}
+                  >
+                    {item.status}
+                  </span>
+                </td>
+                <td style={{ fontWeight: 600, color: "var(--ink)" }}>{item.amount_cents ? `${item.currency} ${(item.amount_cents / 100).toFixed(2)}` : "-"}</td>
               </tr>
             ))}
           </tbody>

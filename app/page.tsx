@@ -68,22 +68,22 @@ export default function DashboardPage() {
 
       <article className="panel">
         <h3>Upcoming deadlines</h3>
-        <p>{counts ? counts.deadlines : "-"}</p>
+        <p className="brand" style={{ margin: "16px 0 0" }}>{counts ? counts.deadlines : "-"}</p>
       </article>
 
       <article className="panel">
         <h3>Open checklist items</h3>
-        <p>{counts ? counts.openChecklistItems : "-"}</p>
+        <p className="brand" style={{ margin: "16px 0 0" }}>{counts ? counts.openChecklistItems : "-"}</p>
       </article>
 
       <article className="panel">
         <h3>Payment logs</h3>
-        <p>{counts ? counts.paymentLogs : "-"}</p>
+        <p className="brand" style={{ margin: "16px 0 0" }}>{counts ? counts.paymentLogs : "-"}</p>
       </article>
 
       <article className="panel">
         <h3>Email drafts</h3>
-        <p>{counts ? counts.emailDrafts : "-"}</p>
+        <p className="brand" style={{ margin: "16px 0 0" }}>{counts ? counts.emailDrafts : "-"}</p>
       </article>
     </section>
   );
