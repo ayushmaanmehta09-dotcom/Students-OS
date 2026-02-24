@@ -1,4 +1,4 @@
-import { readAccessToken } from "@/lib/browser-auth";
+import { getSessionAccessToken, readAccessToken } from "@/lib/browser-auth";
 
 type RequestMethod = "GET" | "POST" | "PATCH" | "DELETE";
 
@@ -8,7 +8,11 @@ type RequestOptions = {
 };
 
 export async function apiFetch<T>(path: string, options: RequestOptions = {}) {
-  const token = readAccessToken();
+  let token = readAccessToken();
+  if (!token) {
+    token = await getSessionAccessToken();
+  }
+
   if (!token) {
     throw new Error("You are not logged in. Please sign in first.");
   }

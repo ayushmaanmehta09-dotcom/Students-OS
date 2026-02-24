@@ -1,9 +1,9 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { clearAccessToken, createBrowserSupabaseClient, saveAccessToken } from "@/lib/browser-auth";
+import { clearAuthSession, createBrowserSupabaseClient, saveAccessToken } from "@/lib/browser-auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -12,17 +12,34 @@ export default function LoginPage() {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
 
-  // Handle OAuth redirect callback
+  const handleSignedIn = useCallback((accessToken: string) => {
+    saveAccessToken(accessToken);
+    setStatus("Signed in. Redirecting to dashboard...");
+    router.replace("/");
+  }, [router]);
+
+  // Handle OAuth redirect callback and any async auth state updates.
   useEffect(() => {
     const supabase = createBrowserSupabaseClient();
-    supabase.auth.getSession().then(({ data: { session } }) => {
+
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.access_token) {
-        saveAccessToken(session.access_token);
-        setStatus("Signed in. Redirecting to dashboard...");
-        router.push("/");
+        handleSignedIn(session.access_token);
       }
     });
-  }, [router]);
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.access_token) {
+        handleSignedIn(session.access_token);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [handleSignedIn]);
 
   async function onOAuthSignIn(provider: "google" | "apple") {
     setError("");
@@ -53,9 +70,7 @@ export default function LoginPage() {
         throw signInError ?? new Error("No session returned from Supabase");
       }
 
-      saveAccessToken(data.session.access_token);
-      setStatus("Signed in. Redirecting to dashboard...");
-      router.push("/");
+      handleSignedIn(data.session.access_token);
     } catch (signInFailure) {
       setError(signInFailure instanceof Error ? signInFailure.message : "Sign in failed");
       setStatus("");
@@ -105,7 +120,14 @@ export default function LoginPage() {
 
           <div style={{ display: "flex", gap: 10 }}>
             <button type="submit">Sign in</button>
-            <button className="secondary" type="button" onClick={() => clearAccessToken()}>
+            <button
+              className="secondary"
+              type="button"
+              onClick={() => {
+                void clearAuthSession();
+                setStatus("Signed out.");
+              }}
+            >
               Clear token
             </button>
             <button className="secondary" type="button" onClick={() => void onSignUp()}>

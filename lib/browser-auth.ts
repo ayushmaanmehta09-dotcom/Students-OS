@@ -25,5 +25,33 @@ export function createBrowserSupabaseClient() {
     throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY");
   }
 
-  return createClient(url, anonKey);
+  return createClient(url, anonKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  });
+}
+
+export async function getSessionAccessToken() {
+  const supabase = createBrowserSupabaseClient();
+  const {
+    data: { session }
+  } = await supabase.auth.getSession();
+
+  const token = session?.access_token ?? "";
+  if (token) {
+    saveAccessToken(token);
+  }
+
+  return token;
+}
+
+export async function clearAuthSession() {
+  const supabase = createBrowserSupabaseClient();
+  await supabase.auth.signOut().catch(() => {
+    // ignore sign-out transport errors and clear local state anyway
+  });
+  clearAccessToken();
 }
