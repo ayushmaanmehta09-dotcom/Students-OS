@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 
 import { apiFetch } from "@/lib/http-client";
 
@@ -23,20 +23,17 @@ export default function ChecklistsPage() {
   const [itemLabel, setItemLabel] = useState("");
   const [error, setError] = useState("");
 
-  async function loadChecklists() {
+  const loadChecklists = useCallback(async () => {
     const payload = await apiFetch<{ items: Checklist[] }>("/api/checklists");
     setChecklists(payload.items);
-    if (!selectedId && payload.items[0]) {
-      setSelectedId(payload.items[0].id);
-    }
-  }
+    setSelectedId((current) => current || payload.items[0]?.id || "");
+  }, []);
 
   useEffect(() => {
     void loadChecklists().catch((loadError) => {
       setError(loadError instanceof Error ? loadError.message : "Failed to load checklists");
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadChecklists]);
 
   useEffect(() => {
     if (!selectedId) return;

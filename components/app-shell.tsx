@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { Route } from "next";
 import type { ReactNode } from "react";
 
-const navItems = [
+const navItems: Array<{ href: Route; label: string }> = [
   { href: "/", label: "Dashboard" },
   { href: "/deadlines", label: "Deadlines" },
   { href: "/checklists", label: "Checklists" },
